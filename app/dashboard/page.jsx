@@ -28,7 +28,7 @@ const GoBiQuestUI = () => {
   return (
     <div className="min-h-screen flex flex-col bg-purple-600 text-white font-sans">
       {/* Navbar */}
-      <nav className="mx-auto mt-4 max-w-6xl w-full bg-black rounded-full px-6 py-2 flex items-center justify-between shadow-lg">
+      <nav className="mx-auto mt-4 max-w-7xl w-full bg-black rounded-full px-6 py-2 flex items-center justify-between shadow-lg">
         <div className="text-2xl font-black text-white">GoBiQuest</div>
         <div className="hidden md:flex gap-8 text-white font-medium text-sm">
           <a href="#" className="hover:underline">
@@ -39,7 +39,7 @@ const GoBiQuestUI = () => {
           </a>
         </div>
         <a
-          href="#"
+          href="./login"
           className="bg-purple-500 hover:bg-purple-400 text-white px-4 py-1.5 text-sm rounded-full font-semibold flex items-center gap-1"
         >
           Login <span className="text-xs">{`>`}</span>
@@ -67,8 +67,8 @@ const GoBiQuestUI = () => {
             </span>
           </div>
           <a
-            href="#"
-            className="inline-block bg-white text-purple-700 px-10 py-3 rounded-full font-bold text-lg shadow-md hover:bg-gray-100"
+            href="./login"
+            className="inline-block bg-white text-black px-10 py-3 rounded-full font-bold text-lg shadow-md hover:bg-gray-100"
           >
             Mulai
           </a>
@@ -77,7 +77,7 @@ const GoBiQuestUI = () => {
 
       {/* Features Section */}
       <section className="py-10 px-6 bg-purple-600">
-        <div className="max-w-5xl mx-auto bg-black text-white rounded-xl p-8 shadow-lg grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+        <div className="max-w-7xl mx-auto bg-black text-white rounded-xl p-8 shadow-lg grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
           <div>
             <h2 className="text-2xl font-bold leading-snug">
               Kenapa harus <br /> Kuis Kami?
@@ -102,38 +102,37 @@ const GoBiQuestUI = () => {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-12 px-6">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      <section className="py-12 px-6 bg-[#A259FF] text-white bg-purple-600">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+          {/* Gambar Ilustrasi */}
           <div className="relative w-full max-w-sm mx-auto">
-            <div className="bg-yellow-300 rounded-3xl aspect-square flex items-center justify-center text-[70px]">
-              🤔
-            </div>
-            <div className="absolute -top-4 -left-4 bg-white text-purple-600 font-bold w-10 h-10 rounded-full flex items-center justify-center shadow">
-              ?
-            </div>
-            <div className="absolute -bottom-4 -right-4 bg-white text-purple-600 font-bold w-10 h-10 rounded-full flex items-center justify-center shadow">
-              ?
-            </div>
+            <img
+              src="/bg-emot-rmv.png"
+              alt="Ilustrasi Kuis"
+              className="w-full h-auto"
+            />
           </div>
+
+          {/* Teks Penjelasan */}
           <div>
-            <h2 className="text-2xl font-bold mb-4">Cara kerja Kuis</h2>
-            <div className="space-y-4 text-white">
+            <h2 className="text-3xl font-bold mb-6">Cara kerja kuis</h2>
+            <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-semibold">1. Pilih Kuis</h3>
-                <p className="opacity-80">
+                <p className="opacity-90">
                   Telusuri berbagai kategori dan pilih kuis yang menarik
                   perhatianmu.
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-semibold">2. Jawab Pertanyaan</h3>
-                <p className="opacity-80">
+                <h3 className="text-lg font-semibold">2. Jawab pertanyaan</h3>
+                <p className="opacity-90">
                   Ikuti instruksi dan jawab setiap pertanyaan dengan jujur.
                 </p>
               </div>
               <div>
                 <h3 className="text-lg font-semibold">3. Dapatkan Hasil</h3>
-                <p className="opacity-80">
+                <p className="opacity-90">
                   Setelah selesai, lihat hasilmu dan temukan apa yang mereka
                   katakan tentang dirimu!
                 </p>
@@ -145,57 +144,68 @@ const GoBiQuestUI = () => {
 
       {/* Testimonial Section */}
       <section className="py-12 px-6 bg-purple-600">
-        <div className="max-w-6xl mx-auto bg-black text-white rounded-t-3xl p-8 shadow-lg">
-          <h2 className="text-2xl font-bold mb-8">Testimoni</h2>
+        <div className="max-w-7xl mx-auto bg-black text-white rounded-t-[60px] p-8 shadow-lg">
+          <h2 className="text-3xl font-bold mb-8">Testimoni</h2>
 
-          {/* Scrollable testimonials with auto scroll */}
-          <div
-            className="flex gap-6 overflow-x-auto scrollbar-hide pb-4"
-            ref={scrollRef}
-          >
-            {[
-              {
-                name: "Ferry",
-                comment: "Kuis ini jadi favorit saya! Selalu ingin coba lagi!",
-              },
-              {
-                name: "Arifubila",
-                comment: "Sangat menyenangkan dan bikin penasaran!",
-              },
-              {
-                name: "Gojan Abdullah",
-                comment: "Desainnya kreatif, cocok untuk menguji sekitar.",
-              },
-              {
-                name: "Siti",
-                comment: "Belajarnya jadi fun dan nggak membosankan!",
-              },
-              {
-                name: "Dimas",
-                comment: "Cocok banget buat adik saya belajar.",
-              },
-            ].map((user, i) => (
-              <div
-                key={i}
-                className="min-w-[250px] flex flex-col items-center text-center flex-shrink-0"
-              >
-                <div className="w-16 h-16 rounded-full p-1 bg-gradient-to-r from-purple-400 to-cyan-400">
-                  <div className="w-full h-full rounded-full bg-white overflow-hidden">
-                    <div className="w-full h-full bg-gray-300"></div>
+          {/* Marquee */}
+          <div className="overflow-hidden relative">
+            <div className="flex gap-8 animate-scroll-x whitespace-nowrap">
+              {[...Array(2)].flatMap((_, round) =>
+                [
+                  {
+                    name: "Arifubila",
+                    comment: "Sangat menyenangkan dan bikin penasaran!",
+                    img: "/.png",
+                  },
+                  {
+                    name: "Gojan Abdullah",
+                    comment: "Kuisnya kreatif, cocok untuk mengisi waktu!",
+                    img: "/.png",
+                  },
+                  {
+                    name: "Ferry",
+                    comment:
+                      "Kuis ini jadi favorit saya! Selalu ingin coba lagi.",
+                    img: "/.png",
+                  },
+                  {
+                    name: "Siti",
+                    comment: "Belajarnya jadi fun dan nggak membosankan!",
+                    img: "/.png",
+                  },
+                ].map((user, i) => (
+                  <div
+                    key={`${user.name}-${round}-${i}`}
+                    className="min-w-[280px] inline-flex items-center gap-4 bg-white text-black rounded-xl px-5 py-4 shadow-md"
+                  >
+                    <div className="flex-shrink-0">
+                      <div className="w-16 h-16 rounded-full p-1 bg-gradient-to-r from-purple-500 to-cyan-400">
+                        <div className="w-full h-full rounded-full bg-white overflow-hidden">
+                          <img
+                            src={user.img}
+                            alt={user.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-base">{user.name}</h3>
+                      <p className="text-sm italic">"{user.comment}"</p>
+                    </div>
                   </div>
-                </div>
-                <div className="bg-white text-black mt-3 px-4 py-3 rounded-xl w-full">
-                  <h3 className="font-bold text-sm">{user.name}</h3>
-                  <p className="text-xs">{user.comment}</p>
-                </div>
-              </div>
-            ))}
+                ))
+              )}
+            </div>
           </div>
 
-          <div className="mt-8 text-center">
-            <button className="bg-purple-500 text-white px-6 py-2 rounded-full font-semibold text-sm uppercase hover:bg-purple-400 transition">
-              Mainkan Kuis
-            </button>
+          {/* Tombol Mainkan Kuis */}
+          <div className="mt-10 text-center">
+            <a href="./login">
+              <button className="bg-purple-500 text-white px-6 py-2 rounded-full font-semibold text-sm uppercase hover:bg-purple-400 transition">
+                Mainkan Kuis
+              </button>
+            </a>
           </div>
         </div>
       </section>
