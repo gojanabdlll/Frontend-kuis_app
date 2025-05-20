@@ -1,0 +1,131 @@
+"use client";
+
+import Link from "next/link";
+import { TiSocialFacebookCircular } from "react-icons/ti";
+import { FaGooglePlusG } from "react-icons/fa";
+import { TiSocialLinkedinCircular } from "react-icons/ti";
+const LoginPage = () => {
+  return (
+    <div
+      className="min-h-screen bg-cover bg-center flex items-center justify-center relative overflow-hidden"
+      style={{ backgroundImage: "url('/bg-gobi quest.png')" }}
+    >
+      <div
+        className="absolute top-5 left-5 w-10 h-10 bg-black rounded-full flex items-center justify-center cursor-pointer z-10"
+        onClick={() => history.back()} // native back
+      >
+        <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white">
+          <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+        </svg>
+      </div>
+
+      <div className="bg-black rounded-xl p-8 w-[350px] max-w-[90%] z-10 mr-160">
+        <h2 className="text-white text-center text-2xl font-bold mb-2">
+          Masuk
+        </h2>
+
+        <div className="text-white text-2xl flex items-center justify-center gap-2 mb-2">
+          <Link href="#">
+            <TiSocialFacebookCircular />
+          </Link>
+          <Link href="#">
+            <FaGooglePlusG />
+          </Link>
+          <Link href="#">
+            <TiSocialLinkedinCircular />
+          </Link>
+        </div>
+
+        <p className="text-white text-center text-sm opacity-80 mb-4">
+          atau gunakan email anda untuk login
+        </p>
+
+        <form className="space-y-5">
+          {/* Email */}
+          <div className="flex flex-col gap-1">
+            <label className="text-white text-sm font-medium">Email</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 12H8m0 0H6m2 0h8m-4-4v8"
+                  />
+                </svg>
+              </span>
+              <input
+                type="email"
+                className="w-full pl-10 pr-4 py-3 rounded-lg bg-white text-white placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
+                placeholder="Masukkan email"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Password */}
+          <div className="flex flex-col gap-1">
+            <label className="text-white text-sm font-medium">Password</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 15v2m0-6v2m0-6h.01M17 12A5 5 0 007 12v0a5 5 0 0010 0z"
+                  />
+                </svg>
+              </span>
+              <input
+                type="password"
+                className="w-full pl-10 pr-4 py-3 rounded-lg bg-white text-white placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
+                placeholder="Masukkan password"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Tombol Masuk */}
+          <button
+            type="submit"
+            className="w-full py-3 rounded-lg bg-purple-600 text-white font-bold hover:bg-purple-700 transition-colors duration-200"
+          >
+            Masuk
+          </button>
+        </form>
+
+        <div className="text-center mt-3">
+          <a href="#" className="text-white text-sm opacity-80">
+            Lupa password?
+          </a>
+        </div>
+
+        <div className="text-center mt-3">
+          <Link href="/register" className="text-white text-sm opacity-80">
+            Belum punya akun?
+          </Link>
+        </div>
+      </div>
+
+      <div className="absolute top-[15%] right-[15%] text-lime-400 text-4xl decoration z-[-1]">
+        ★
+      </div>
+      <div className="absolute bottom-[20%] left-[25%] w-0 h-0 border-l-[25px] border-l-transparent border-r-[25px] border-r-transparent border-b-[40px] border-b-lime-400 rotate-[-20deg] z-[-1]" />
+      <div className="absolute bottom-[15%] right-[20%] w-10 h-10 border-8 border-orange-400 rounded-full z-[-1]" />
+    </div>
+  );
+};
+
+export default LoginPage;
