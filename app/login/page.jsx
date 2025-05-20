@@ -51,14 +51,7 @@ const LoginPage = () => {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M16 12H8m0 0H6m2 0h8m-4-4v8"
-                  />
-                </svg>
+                ></svg>
               </span>
               <input
                 type="email"
@@ -79,14 +72,7 @@ const LoginPage = () => {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 15v2m0-6v2m0-6h.01M17 12A5 5 0 007 12v0a5 5 0 0010 0z"
-                  />
-                </svg>
+                ></svg>
               </span>
               <input
                 type="password"

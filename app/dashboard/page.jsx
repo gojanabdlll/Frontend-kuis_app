@@ -47,31 +47,28 @@ const GoBiQuestUI = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="text-center py-12 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-10 flex flex-wrap justify-center items-center gap-3 text-5xl font-extrabold leading-tight">
-            <span className="bg-yellow-300 px-2 py-1 rounded rotate-[-3deg] text-black text-sm md:text-lg">
-              Sains
-            </span>
-            <span className="text-white">Go</span>
-            <span className="text-white">Bi</span>
-            <span className="bg-pink-300 px-2 py-1 rounded rotate-2 text-black text-sm md:text-lg">
-              B. Inggris
-            </span>
-            <div className="w-full text-[60px] text-black -mt-2">Quest</div>
-            <span className="bg-blue-200 px-2 py-1 rounded text-black text-sm md:text-lg">
-              Matematika
-            </span>
-            <span className="bg-red-200 px-2 py-1 rounded text-black text-sm md:text-lg">
-              Sejarah
-            </span>
-          </div>
-          <a
-            href="./login"
-            className="inline-block bg-white text-black px-10 py-3 rounded-full font-bold text-lg shadow-md hover:bg-gray-100"
+      <section className="text-center ">
+        <div className="max-w-full mx-auto">
+          <div
+            className="w-full min-h-screen flex flex-col justify-center items-center bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: "url('/img-001.png')",
+              backgroundAttachment: "scroll",
+            }}
           >
-            Mulai
-          </a>
+            <img
+              src="/img-002.png"
+              alt="Go Bi Quest"
+              className="max-w-3xl h-auto mb-6"
+            />
+
+            <a
+              href="./login"
+              className="inline-block bg-white text-black px-10 py-3 rounded-full font-bold text-lg shadow-md hover:bg-gray-100 transition duration-200"
+            >
+              Mulai
+            </a>
+          </div>
         </div>
       </section>
 
