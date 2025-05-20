@@ -154,22 +154,17 @@ const GoBiQuestUI = () => {
                 [
                   {
                     name: "Arifubila",
-                    comment: "Sangat menyenangkan dan bikin penasaran!",
-                    img: "/.png",
-                  },
-                  {
-                    name: "Gojan Abdullah",
                     comment: "Kuisnya kreatif, cocok untuk mengisi waktu!",
                     img: "/.png",
                   },
                   {
-                    name: "Ferry",
+                    name: "Gojan Abdullah",
                     comment:
                       "Kuis ini jadi favorit saya! Selalu ingin coba lagi.",
                     img: "/.png",
                   },
                   {
-                    name: "Siti",
+                    name: "Ferry",
                     comment: "Belajarnya jadi fun dan nggak membosankan!",
                     img: "/.png",
                   },
