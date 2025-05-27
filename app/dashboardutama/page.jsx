@@ -28,23 +28,23 @@ const GoBiQuestUI = () => {
   return (
     <div className="min-h-screen flex flex-col bg-purple-600 text-white font-sans">
       {/* Navbar */}
-      <nav className="mx-auto mt-4 max-w-7xl w-full bg-black rounded-full px-6 py-2 flex items-center justify-between shadow-lg">
-        <div className="text-2xl font-black text-white">GoBiQuest</div>
-        <div className="hidden md:flex gap-8 text-white font-medium text-sm">
-          <a href="./login" className="hover:underline">
-            Kategori Pelajaran
-          </a>
-          <a href="./login" className="hover:underline">
-            Tampilan Skor
-          </a>
-        </div>
-        <a
-          href="./login"
-          className="bg-purple-500 hover:bg-purple-400 text-white px-4 py-1.5 text-sm rounded-full font-semibold flex items-center gap-1"
-        >
-          Login <span className="text-xs">{`>`}</span>
-        </a>
-      </nav>
+      <div className="flex items-center justify-between px-6 py-4">
+        <nav className="mx-auto mt-4 max-w-7xl w-295 bg-black rounded-xl px-6 py-3 flex items-center justify-between shadow-lg">
+          <div className="text-2xl font-black text-white">GoBiQuest</div>
+          <div className="hidden md:flex gap-8 text-white font-medium text-sm">
+            <a href="#" className="hover:underline">
+              Kategori Pelajaran
+            </a>
+            <a href="leaderboard" className="hover:underline">
+              Tampilan Skor
+            </a>
+          </div>
+          <div className="flex items-center gap-2 bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-bold">
+            <span>250 Point</span>
+            <div className="w-6 h-6 bg-gray-600 rounded-full"></div>
+          </div>
+        </nav>
+      </div>
 
       {/* Hero Section */}
       <section className="text-center ">
