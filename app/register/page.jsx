@@ -47,7 +47,7 @@ const RegisterPage = () => {
             <label className="text-white text-sm font-medium">Nama</label>
             <input
               type="text"
-              className="w-full px-4 py-3 rounded-lg bg-white text-white placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
+              className="w-full px-4 py-3 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
               placeholder="Masukkan nama lengkap"
               required
             />
@@ -58,7 +58,7 @@ const RegisterPage = () => {
             <label className="text-white text-sm font-medium">Email</label>
             <input
               type="email"
-              className="w-full px-4 py-3 rounded-lg bg-white text-white placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
+              className="w-full px-4 py-3 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
               placeholder="Masukkan email"
               required
             />
@@ -69,7 +69,7 @@ const RegisterPage = () => {
             <label className="text-white text-sm font-medium">Password</label>
             <input
               type="password"
-              className="w-full px-4 py-3 rounded-lg bg-white text-white placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
+              className="w-full px-4 py-3 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
               placeholder="Masukkan password"
               required
             />

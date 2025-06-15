@@ -1,29 +1,43 @@
 "use client";
 
+import { useRouter } from "next/navigation"; // Next.js 13+
 import Link from "next/link";
 import { TiSocialFacebookCircular } from "react-icons/ti";
 import { FaGooglePlusG } from "react-icons/fa";
 import { TiSocialLinkedinCircular } from "react-icons/ti";
+
 const LoginPage = () => {
+  const router = useRouter(); // Hook untuk navigasi
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Di sini bisa tambahkan validasi login, atau panggil API
+    // Misalnya setelah login sukses:
+    router.push("../dashboardutama"); // Ganti "/dashboard" dengan halaman tujuan Anda
+  };
+
   return (
     <div
       className="min-h-screen bg-cover bg-center flex items-center justify-center relative overflow-hidden"
       style={{ backgroundImage: "url('/bg-gobi quest.png')" }}
     >
+      {/* Tombol kembali */}
       <div
         className="absolute top-5 left-5 w-10 h-10 bg-black rounded-full flex items-center justify-center cursor-pointer z-10"
-        onClick={() => history.back()} // native back
+        onClick={() => history.back()}
       >
         <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white">
           <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
         </svg>
       </div>
 
+      {/* Form Login */}
       <div className="bg-black rounded-xl p-8 w-[350px] max-w-[90%] z-10 mr-160">
         <h2 className="text-white text-center text-2xl font-bold mb-2">
           Masuk
         </h2>
 
+        {/* Ikon Sosial Media */}
         <div className="text-white text-2xl flex items-center justify-center gap-2 mb-2">
           <Link href="#">
             <TiSocialFacebookCircular />
@@ -40,22 +54,15 @@ const LoginPage = () => {
           atau gunakan email anda untuk login
         </p>
 
-        <form className="space-y-5">
+        {/* Form input */}
+        <form onSubmit={handleSubmit} className="space-y-5">
           {/* Email */}
           <div className="flex flex-col gap-1">
             <label className="text-white text-sm font-medium">Email</label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                ></svg>
-              </span>
               <input
                 type="email"
-                className="w-full pl-10 pr-4 py-3 rounded-lg bg-white text-white placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
+                className="w-full pl-10 pr-4 py-3 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
                 placeholder="Masukkan email"
                 required
               />
@@ -66,17 +73,9 @@ const LoginPage = () => {
           <div className="flex flex-col gap-1">
             <label className="text-white text-sm font-medium">Password</label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                ></svg>
-              </span>
               <input
                 type="password"
-                className="w-full pl-10 pr-4 py-3 rounded-lg bg-white text-white placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
+                className="w-full pl-10 pr-4 py-3 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
                 placeholder="Masukkan password"
                 required
               />
@@ -105,6 +104,7 @@ const LoginPage = () => {
         </div>
       </div>
 
+      {/* Elemen Dekoratif */}
       <div className="absolute top-[15%] right-[15%] text-lime-400 text-4xl decoration z-[-1]">
         ★
       </div>

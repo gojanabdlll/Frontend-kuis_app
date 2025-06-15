@@ -32,10 +32,10 @@ const GoBiQuestUI = () => {
         <nav className="mx-auto mt-4 max-w-7xl w-295 bg-black rounded-xl px-6 py-3 flex items-center justify-between shadow-lg">
           <div className="text-2xl font-black text-white">GoBiQuest</div>
           <div className="hidden md:flex gap-8 text-white font-medium text-sm">
-            <a href="#" className="hover:underline">
+            <a href="./halamanquiz" className="hover:underline">
               Kategori Pelajaran
             </a>
-            <a href="leaderboard" className="hover:underline">
+            <a href="../leaderboard" className="hover:underline">
               Tampilan Skor
             </a>
           </div>
@@ -63,7 +63,7 @@ const GoBiQuestUI = () => {
             />
 
             <a
-              href="./login"
+              href="/halamanquiz"
               className="inline-block bg-white text-black px-10 py-3 rounded-full font-bold text-lg shadow-md hover:bg-gray-100 transition duration-200"
             >
               Mulai
@@ -193,7 +193,7 @@ const GoBiQuestUI = () => {
 
           {/* Tombol Mainkan Kuis */}
           <div className="mt-10 text-center">
-            <a href="./login">
+            <a href="../halamanquiz">
               <button className="bg-purple-500 text-white px-6 py-2 rounded-full font-semibold text-sm uppercase hover:bg-purple-400 transition">
                 Mainkan Kuis
               </button>
