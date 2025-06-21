@@ -1,31 +1,104 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 
 export default function QuizPage() {
+  const [questions, setQuestions] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [answers, setAnswers] = useState({});
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
-  const question = {
-    number: 1,
-    text: "Apa hasil dari 15 x 6?",
-    options: [
-      { id: "a", text: "90" },
-      { id: "b", text: "80" },
-      { id: "c", text: "70" },
-      { id: "d", text: "100" },
-    ],
-  };
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/quiz");
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0 && data[0].questions) {
+          const fetchedQuestions = data[0].questions.map((q, index) => ({
+            number: index + 1,
+            text: q.question,
+            options: q.options.map((opt, i) => ({
+              id: String.fromCharCode(97 + i), // a, b, c, d
+              text: opt,
+            })),
+          }));
+          setQuestions(fetchedQuestions);
+        } else {
+          console.warn("Format data tidak sesuai", data);
+        }
+      } catch (err) {
+        console.error("Gagal mengambil data soal:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchQuestions();
+  }, []);
 
   const handleAnswerSelect = (optionId) => {
     setSelectedAnswer(optionId);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (selectedAnswer) {
-      console.log("Jawaban dipilih:", selectedAnswer);
+      const newAnswers = {
+        ...answers,
+        [currentQuestionIndex]: selectedAnswer,
+      };
+      setAnswers(newAnswers);
+      setSelectedAnswer(null);
+
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      } else {
+        console.log("Selesai. Jawaban:", newAnswers);
+
+        // 🔐 Ambil token dari localStorage atau session
+        const token = localStorage.getItem("token");
+
+        try {
+          const res = await fetch("http://localhost:5000/api/score/submit", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              quizId: "6803751a225adeb7c18087fa", // <- Ganti dengan ID kuis yang aktif
+              answers: Object.entries(newAnswers).map(([index, optionId]) => ({
+                questionIndex: parseInt(index),
+                selectedOption: optionId,
+              })),
+            }),
+          });
+
+          const data = await res.json();
+
+          if (!res.ok) throw new Error(data.message || "Gagal submit jawaban");
+
+          // Jika sukses baru redirect
+          router.push("/hasilquiz");
+        } catch (error) {
+          console.error("Gagal kirim jawaban:", error.message);
+          alert("Gagal submit jawaban. Coba lagi.");
+        }
+      }
     }
   };
+
+  const currentQuestion = questions[currentQuestionIndex];
+
+  if (loading) {
+    return <div className="text-white p-8">Loading soal...</div>;
+  }
+
+  if (!currentQuestion) {
+    return <div className="text-white p-8">Soal tidak ditemukan.</div>;
+  }
 
   return (
     <div
@@ -36,22 +109,27 @@ export default function QuizPage() {
         backgroundAttachment: "scroll",
       }}
     >
-      {/* Kartu Soal */}
       <div className="bg-[#FFD400] rounded-[16px] shadow-xl px-6 py-6 w-[90%] max-w-xl relative z-10">
-        {/* Tombol Back */}
-        <button className="absolute top-4 left-4 w-8 h-8 bg-black rounded-md flex items-center justify-center">
-          <ChevronLeft className="w-4 h-4 text-white" />
-        </button>
+        {currentQuestionIndex > 0 && (
+          <button
+            onClick={() => {
+              const prevIndex = currentQuestionIndex - 1;
+              setCurrentQuestionIndex(prevIndex);
+              setSelectedAnswer(answers[prevIndex] || null);
+            }}
+            className="absolute top-4 left-4 w-8 h-8 bg-black rounded-md flex items-center justify-center"
+          >
+            <ChevronLeft className="w-4 h-4 text-white" />
+          </button>
+        )}
 
-        {/* Pertanyaan */}
         <div className="pt-10 pb-6">
           <h2 className="text-lg font-bold text-black mb-4">
-            {question.number}. {question.text}
+            {currentQuestion.number}. {currentQuestion.text}
           </h2>
 
-          {/* Pilihan Jawaban */}
           <ul className="space-y-2 pl-2">
-            {question.options.map((option) => (
+            {currentQuestion.options.map((option) => (
               <li
                 key={option.id}
                 onClick={() => handleAnswerSelect(option.id)}
@@ -67,7 +145,6 @@ export default function QuizPage() {
           </ul>
         </div>
 
-        {/* Tombol Lanjut */}
         <div className="flex justify-end mt-4">
           <button
             onClick={handleNext}
@@ -78,29 +155,9 @@ export default function QuizPage() {
                 : "bg-black text-white cursor-not-allowed"
             }`}
           >
-            Lanjut
+            {currentQuestionIndex < questions.length - 1 ? "Lanjut" : "Selesai"}
           </button>
         </div>
-      </div>
-      <div className="absolute bottom-30 left-34">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="#facc15"
-          viewBox="0 0 24 24"
-          className="w-10 h-10"
-        >
-          <path d="M12 .587l3.668 7.568L24 9.75l-6 5.85L19.335 24 12 20.202 4.665 24 6 15.6 0 9.75l8.332-1.595z" />
-        </svg>
-      </div>
-
-      <div className="absolute bottom-120 left-40">
-        <div className="w-0 h-0 border-l-[20px] border-white border-l-transparent border-r-[20px] border-r-transparent border-b-[38px] border-teal-300"></div>
-      </div>
-      <div className="absolute bottom-120 right-40">
-        <div className="w-0 h-0 border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-b-[38px] border-teal-300"></div>
-      </div>
-      <div className="absolute bottom-32 right-24">
-        <div className="w-26 h-26 border-16 border-white rounded-tr-full border-l-transparent border-b-transparent rotate-[35deg]"></div>
       </div>
     </div>
   );

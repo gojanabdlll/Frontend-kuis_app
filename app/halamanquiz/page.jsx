@@ -1,8 +1,37 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Star } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const QuizPage = () => {
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [role, setRole] = useState("user"); // default role
+  const router = useRouter();
+
+  useEffect(() => {
+    // Ambil data role dari localStorage
+    const storedRole = localStorage.getItem("role");
+    if (storedRole) {
+      setRole(storedRole);
+    }
+
+    const fetchQuestions = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/quiz");
+        const data = await res.json();
+        setQuestions(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Gagal mengambil data soal:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchQuestions();
+  }, []);
+
   const quizCategories = [
     {
       id: 1,
@@ -38,8 +67,7 @@ const QuizPage = () => {
   ];
 
   const handleStartQuiz = (categoryId) => {
-    console.log(`Starting quiz for category: ${categoryId}`);
-    // Tambahkan logika navigasi kuis di sini
+    router.push(`/soalquiz?category=${categoryId}`);
   };
 
   return (
@@ -67,9 +95,20 @@ const QuizPage = () => {
           {/* Header */}
           <div className="flex justify-between items-start mb-10">
             <h1 className="text-3xl font-extrabold leading-snug">
-              Temukan Dirimu Melalui Kuis Menarik Ini!
+              Temukan Dirimu Melalui Kuis <br />
+              Menarik Ini!
             </h1>
-            <Star size={28} fill="white" className="text-purple-400" />
+            <div className="flex items-center space-x-4">
+              {role === "admin" && (
+                <button
+                  onClick={() => router.push("/tambahsoal")}
+                  className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-full shadow-md transition"
+                >
+                  Tambah Soal
+                </button>
+              )}
+              <Star size={28} fill="white" className="text-purple-400" />
+            </div>
           </div>
 
           {/* Quiz Cards */}

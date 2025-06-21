@@ -1,19 +1,52 @@
 "use client";
 
-import { useRouter } from "next/navigation"; // Next.js 13+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { TiSocialFacebookCircular } from "react-icons/ti";
 import { FaGooglePlusG } from "react-icons/fa";
 import { TiSocialLinkedinCircular } from "react-icons/ti";
 
 const LoginPage = () => {
-  const router = useRouter(); // Hook untuk navigasi
+  const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Di sini bisa tambahkan validasi login, atau panggil API
-    // Misalnya setelah login sukses:
-    router.push("../dashboardutama"); // Ganti "/dashboard" dengan halaman tujuan Anda
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const res = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Login gagal");
+      }
+
+      setMessage("✅ Login berhasil!");
+      setForm({ email: "", password: "" });
+
+      setTimeout(() => {
+        router.push("/dashboardutama");
+      }, 1000); // redirect setelah 1 detik
+    } catch (err) {
+      setMessage("❌ " + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -37,7 +70,6 @@ const LoginPage = () => {
           Masuk
         </h2>
 
-        {/* Ikon Sosial Media */}
         <div className="text-white text-2xl flex items-center justify-center gap-2 mb-2">
           <Link href="#">
             <TiSocialFacebookCircular />
@@ -54,49 +86,52 @@ const LoginPage = () => {
           atau gunakan email anda untuk login
         </p>
 
-        {/* Form input */}
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Email */}
           <div className="flex flex-col gap-1">
             <label className="text-white text-sm font-medium">Email</label>
-            <div className="relative">
-              <input
-                type="email"
-                className="w-full pl-10 pr-4 py-3 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
-                placeholder="Masukkan email"
-                required
-              />
-            </div>
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              className="w-full pl-4 pr-4 py-3 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
+              placeholder="Masukkan email"
+              required
+            />
           </div>
 
-          {/* Password */}
           <div className="flex flex-col gap-1">
             <label className="text-white text-sm font-medium">Password</label>
-            <div className="relative">
-              <input
-                type="password"
-                className="w-full pl-10 pr-4 py-3 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
-                placeholder="Masukkan password"
-                required
-              />
-            </div>
+            <input
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              className="w-full pl-4 pr-4 py-3 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
+              placeholder="Masukkan password"
+              required
+            />
           </div>
 
-          {/* Tombol Masuk */}
           <button
             type="submit"
+            disabled={loading}
             className="w-full py-3 rounded-lg bg-purple-600 text-white font-bold hover:bg-purple-700 transition-colors duration-200"
           >
-            Masuk
+            {loading ? "Loading..." : "Masuk"}
           </button>
         </form>
+
+        {/* Pesan */}
+        {message && (
+          <p className="text-white text-sm mt-2 text-center">{message}</p>
+        )}
 
         <div className="text-center mt-3">
           <a href="#" className="text-white text-sm opacity-80">
             Lupa password?
           </a>
         </div>
-
         <div className="text-center mt-3">
           <Link href="/register" className="text-white text-sm opacity-80">
             Belum punya akun?
@@ -104,8 +139,8 @@ const LoginPage = () => {
         </div>
       </div>
 
-      {/* Elemen Dekoratif */}
-      <div className="absolute top-[15%] right-[15%] text-lime-400 text-4xl decoration z-[-1]">
+      {/* Dekorasi */}
+      <div className="absolute top-[15%] right-[15%] text-lime-400 text-4xl z-[-1]">
         ★
       </div>
       <div className="absolute bottom-[20%] left-[25%] w-0 h-0 border-l-[25px] border-l-transparent border-r-[25px] border-r-transparent border-b-[40px] border-b-lime-400 rotate-[-20deg] z-[-1]" />

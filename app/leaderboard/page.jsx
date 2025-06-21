@@ -28,7 +28,7 @@ const RankingPage = () => {
         <nav className="mx-auto mt-4 max-w-7xl w-295 bg-black rounded-xl px-6 py-3 flex items-center justify-between shadow-lg">
           <div className="text-2xl font-black text-white">GoBiQuest</div>
           <div className="hidden md:flex gap-8 text-white font-medium text-sm">
-            <a href="#" className="hover:underline">
+            <a href="/halamanquiz" className="hover:underline">
               Kategori Pelajaran
             </a>
             <a href="leaderboard" className="hover:underline">

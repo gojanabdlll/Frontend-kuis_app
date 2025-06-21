@@ -3,7 +3,61 @@ import Link from "next/link";
 import { TiSocialFacebookCircular } from "react-icons/ti";
 import { FaGooglePlusG } from "react-icons/fa";
 import { TiSocialLinkedinCircular } from "react-icons/ti";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 const RegisterPage = () => {
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleChange = (e) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const res = await fetch("http://localhost:5000/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: form.username,
+          email: form.email,
+          password: form.password,
+          role: "user",
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Registrasi gagal");
+      }
+
+      setMessage("✅ Registrasi berhasil!");
+      setForm({ username: "", email: "", password: "" });
+
+      // ⏳ Redirect setelah 1 detik
+      setTimeout(() => {
+        router.push("/login");
+      }, 1000);
+    } catch (err) {
+      setMessage("❌ " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div
       className="min-h-screen bg-cover bg-center flex items-center justify-center relative overflow-hidden"
@@ -41,12 +95,15 @@ const RegisterPage = () => {
           atau daftar dengan email anda
         </p>
 
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSubmit}>
           {/* Nama */}
           <div className="flex flex-col gap-1">
             <label className="text-white text-sm font-medium">Nama</label>
             <input
               type="text"
+              name="username"
+              value={form.username}
+              onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
               placeholder="Masukkan nama lengkap"
               required
@@ -58,6 +115,9 @@ const RegisterPage = () => {
             <label className="text-white text-sm font-medium">Email</label>
             <input
               type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
               placeholder="Masukkan email"
               required
@@ -69,6 +129,9 @@ const RegisterPage = () => {
             <label className="text-white text-sm font-medium">Password</label>
             <input
               type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
               placeholder="Masukkan password"
               required
@@ -78,11 +141,17 @@ const RegisterPage = () => {
           {/* Tombol Daftar */}
           <button
             type="submit"
+            disabled={loading}
             className="w-full py-3 rounded-lg bg-purple-600 text-white font-bold hover:bg-purple-700 transition-colors duration-200"
           >
-            Daftar
+            {loading ? "Mendaftarkan..." : "Daftar"}
           </button>
         </form>
+
+        {/* Message */}
+        {message && (
+          <div className="mt-3 text-sm text-center text-white">{message}</div>
+        )}
 
         <div className="text-center mt-3">
           <a href="/login" className="text-white text-sm opacity-80">
