@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 export default function QuizPage() {
   const [questions, setQuestions] = useState([]);
@@ -11,18 +12,23 @@ export default function QuizPage() {
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const category = searchParams.get("category");
+  const [quizId, setQuizId] = useState(null);
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/quiz");
+        const res = await fetch(
+          `http://localhost:5000/api/quiz?category=${category}`
+        );
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0 && data[0].questions) {
           const fetchedQuestions = data[0].questions.map((q, index) => ({
             number: index + 1,
             text: q.question,
             options: q.options.map((opt, i) => ({
-              id: String.fromCharCode(97 + i),
+              id: String.fromCharCode(65 + i), // A, B, C, D
               text: opt,
             })),
           }));
@@ -36,8 +42,11 @@ export default function QuizPage() {
         setLoading(false);
       }
     };
-    fetchQuestions();
-  }, []);
+
+    if (category) {
+      fetchQuestions();
+    }
+  }, [category]);
 
   const handleAnswerSelect = (optionId) => {
     setSelectedAnswer(optionId);
@@ -74,7 +83,7 @@ export default function QuizPage() {
               Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-              quizId: "6803751a225adeb7c18087fa",
+              quizId: data[0]._id, // dari hasil fetch kuis pertama
               answers: Object.entries(newAnswers).map(([index, optionId]) => ({
                 questionIndex: parseInt(index),
                 selectedOption: optionId,
