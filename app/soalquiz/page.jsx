@@ -23,7 +23,12 @@ export default function QuizPage() {
           `http://localhost:5000/api/quiz?category=${category}`
         );
         const data = await res.json();
+
         if (Array.isArray(data) && data.length > 0 && data[0].questions) {
+          // Simpan quizId ke state dan localStorage
+          setQuizId(data[0]._id);
+          localStorage.setItem("quizId", data[0]._id);
+
           const fetchedQuestions = data[0].questions.map((q, index) => ({
             number: index + 1,
             text: q.question,
@@ -72,34 +77,11 @@ export default function QuizPage() {
       if (currentQuestionIndex < questions.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
       } else {
-        console.log("Selesai. Jawaban:", newAnswers);
-        const token = localStorage.getItem("token");
+        // Simpan ke localStorage sebelum redirect ke hasil
+        const answerArray = Object.values(newAnswers);
+        localStorage.setItem("answers", JSON.stringify(answerArray));
 
-        try {
-          const res = await fetch("http://localhost:5000/api/score/submit", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              quizId: data[0]._id, // dari hasil fetch kuis pertama
-              answers: Object.entries(newAnswers).map(([index, optionId]) => ({
-                questionIndex: parseInt(index),
-                selectedOption: optionId,
-              })),
-            }),
-          });
-
-          const data = await res.json();
-
-          if (!res.ok) throw new Error(data.message || "Gagal submit jawaban");
-
-          router.push("/hasilquiz");
-        } catch (error) {
-          console.error("Gagal kirim jawaban:", error.message);
-          alert("Gagal submit jawaban. Coba lagi.");
-        }
+        router.push("/hasilquiz"); // ⬅️ langsung ke hasil, submit dilakukan di halaman hasil
       }
     }
   };
