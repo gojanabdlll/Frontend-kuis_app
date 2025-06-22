@@ -35,14 +35,16 @@ const QuizPage = () => {
   const quizCategories = [
     {
       id: 1,
-      title: "MATEMATIKA",
+      title: "matematika",
+      display: "MATEMATIKA",
       description: "Uji kemampuan matematika dan lihat seberapa jago kamu!",
       color: "bg-yellow-400",
       textColor: "text-black",
     },
     {
       id: 2,
-      title: "SAINS",
+      title: "sains",
+      display: "SAINS",
       description:
         "Jelajahi dunia sains dan uji pengetahuanmu tentang alam semesta.",
       color: "bg-teal-300",
@@ -50,7 +52,8 @@ const QuizPage = () => {
     },
     {
       id: 3,
-      title: "B. INGGRIS",
+      title: "bahasa inggris",
+      display: "B. INGGRIS",
       description:
         "Tingkatkan kemampuan bahasa Inggrismu dan ketahui seberapa fasih kamu!",
       color: "bg-purple-500",
@@ -58,7 +61,8 @@ const QuizPage = () => {
     },
     {
       id: 4,
-      title: "SEJARAH",
+      title: "sejarah",
+      display: "SEJARAH",
       description:
         "Tes pengetahuanmu tentang peristiwa dan tokoh sejarah dunia.",
       color: "bg-white",
@@ -66,8 +70,8 @@ const QuizPage = () => {
     },
   ];
 
-  const handleStartQuiz = (categoryId) => {
-    router.push(`/soalquiz?category=${categoryId}`);
+  const handleStartQuiz = (categoryName) => {
+    router.push(`/soalquiz?category=${encodeURIComponent(categoryName)}`);
   };
 
   return (
@@ -119,11 +123,11 @@ const QuizPage = () => {
                 className={`${cat.color} ${cat.textColor} rounded-2xl p-5 flex flex-col justify-between min-h-[240px] shadow-lg`}
               >
                 <div>
-                  <h2 className="text-xl font-extrabold mb-2">{cat.title}</h2>
+                  <h2 className="text-xl font-extrabold mb-2">{cat.display}</h2>
                   <p className="text-sm">{cat.description}</p>
                 </div>
                 <button
-                  onClick={() => handleStartQuiz(cat.id)}
+                  onClick={() => handleStartQuiz(cat.title)} // <-- pakai title (kategori DB)
                   className="mt-5 bg-black text-white py-2 rounded-full font-semibold hover:bg-gray-800 transition"
                 >
                   Mulai
