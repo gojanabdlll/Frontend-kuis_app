@@ -34,13 +34,23 @@ const LoginPage = () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Login gagal");
 
-      // ✅ Simpan token ke localStorage
-      localStorage.setItem("token", data.token);
+      // ✅ Simpan token dan role ke localStorage
+      if (typeof window !== "undefined") {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.role);
+      }
 
       setMessage("✅ Login berhasil!");
       setForm({ email: "", password: "" });
 
-      setTimeout(() => router.push("/dashboardutama"), 1000);
+      // ✅ Redirect berdasarkan role
+      setTimeout(() => {
+        if (data.role === "admin") {
+          router.push("/adminpanel"); // ganti ke halaman admin kamu
+        } else {
+          router.push("/dashboardutama"); // halaman user biasa
+        }
+      }, 1000);
     } catch (err) {
       setMessage("❌ " + err.message);
     } finally {
@@ -56,7 +66,6 @@ const LoginPage = () => {
         backgroundColor: "#9B5DE5",
       }}
     >
-      {/* Tombol kembali */}
       <div
         className="absolute top-4 left-4 w-8 h-8 bg-black text-white flex items-center justify-center rounded-full cursor-pointer z-10"
         onClick={() => history.back()}
@@ -66,14 +75,12 @@ const LoginPage = () => {
         </svg>
       </div>
 
-      {/* Form login */}
       <div className="flex items-center justify-center md:w-1/2 w-full px-4 py-10 md:py-0">
         <div className="bg-black rounded-2xl p-8 w-full max-w-sm shadow-xl">
           <h2 className="text-white text-2xl font-bold text-center mb-4">
             Masuk
           </h2>
 
-          {/* Ikon Sosial */}
           <div className="flex justify-center items-center text-white text-xl gap-4 mb-2">
             <TiSocialFacebookCircular />
             <FaGooglePlusG />
@@ -90,7 +97,7 @@ const LoginPage = () => {
               name="email"
               value={form.email}
               onChange={handleChange}
-              placeholder="Nama"
+              placeholder="Email"
               className="w-full px-4 py-2 rounded-full bg-white text-black placeholder-gray-700 focus:outline-none"
               required
             />
@@ -103,7 +110,6 @@ const LoginPage = () => {
               className="w-full px-4 py-2 rounded-full bg-white text-black placeholder-gray-700 focus:outline-none"
               required
             />
-
             <button
               type="submit"
               disabled={loading}
@@ -131,7 +137,6 @@ const LoginPage = () => {
         </div>
       </div>
 
-      {/* Teks Samping Kanan */}
       <div className="hidden md:flex items-center justify-center md:w-1/2 relative px-6">
         <img
           src="/Group 85.png"
