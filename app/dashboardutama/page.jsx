@@ -30,7 +30,12 @@ const GoBiQuestUI = () => {
       {/* Navbar */}
       <div className="flex items-center justify-between px-6 py-4">
         <nav className="mx-auto mt-4 max-w-7xl w-295 bg-black rounded-xl px-6 py-3 flex items-center justify-between shadow-lg">
-          <div className="text-2xl font-black text-white">GoBiQuest</div>
+          <div
+            href="/dashboardutama"
+            className="text-2xl font-black text-white"
+          >
+            GoBiQuest
+          </div>
           <div className="hidden md:flex gap-8 text-white font-medium text-sm">
             <a href="./halamanquiz" className="hover:underline">
               Kategori Pelajaran
