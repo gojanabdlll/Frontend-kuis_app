@@ -35,24 +35,46 @@ export default function QuizFormPage() {
     setShowToast(true);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!selectedQuiz || !question || !answer || !correctAnswer) {
       showToastMessage("Mohon lengkapi semua field", "error");
       return;
     }
 
-    console.log({
-      selectedQuiz,
-      question,
-      answer,
-      correctAnswer,
-    });
+    const token = localStorage.getItem("token");
 
-    setSelectedQuiz("");
-    setQuestion("");
-    setAnswer("");
-    setCorrectAnswer("");
-    showToastMessage("Soal berhasil ditambahkan!");
+    try {
+      const res = await fetch("http://localhost:5000/api/quiz/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          title: selectedQuiz,
+          category: selectedQuiz,
+          questions: [
+            {
+              question,
+              options: answer.split("\n"), // jawaban dipisah dengan newline
+              answer: correctAnswer.trim(),
+            },
+          ],
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message || "Gagal menambah soal");
+
+      showToastMessage("Soal berhasil ditambahkan!", "success");
+      setSelectedQuiz("");
+      setQuestion("");
+      setAnswer("");
+      setCorrectAnswer("");
+    } catch (err) {
+      showToastMessage(err.message, "error");
+    }
   };
 
   return (
