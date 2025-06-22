@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { TiSocialFacebookCircular } from "react-icons/ti";
+import {
+  TiSocialFacebookCircular,
+  TiSocialLinkedinCircular,
+} from "react-icons/ti";
 import { FaGooglePlusG } from "react-icons/fa";
-import { TiSocialLinkedinCircular } from "react-icons/ti";
 
 const LoginPage = () => {
   const router = useRouter();
-
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -31,17 +32,15 @@ const LoginPage = () => {
       });
 
       const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Login gagal");
 
-      if (!res.ok) {
-        throw new Error(data.message || "Login gagal");
-      }
+      // ✅ Simpan token ke localStorage
+      localStorage.setItem("token", data.token);
 
       setMessage("✅ Login berhasil!");
       setForm({ email: "", password: "" });
 
-      setTimeout(() => {
-        router.push("/dashboardutama");
-      }, 1000); // redirect setelah 1 detik
+      setTimeout(() => router.push("/dashboardutama"), 1000);
     } catch (err) {
       setMessage("❌ " + err.message);
     } finally {
@@ -51,100 +50,95 @@ const LoginPage = () => {
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center flex items-center justify-center relative overflow-hidden"
-      style={{ backgroundImage: "url('/bg-gobi quest.png')" }}
+      className="min-h-screen bg-cover bg-center relative flex items-center justify-center px-4"
+      style={{
+        backgroundImage: "url('/img-001-black.png')",
+        backgroundColor: "#9B5DE5",
+      }}
     >
       {/* Tombol kembali */}
       <div
-        className="absolute top-5 left-5 w-10 h-10 bg-black rounded-full flex items-center justify-center cursor-pointer z-10"
+        className="absolute top-4 left-4 w-8 h-8 bg-black text-white flex items-center justify-center rounded-full cursor-pointer z-10"
         onClick={() => history.back()}
       >
-        <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white">
+        <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white">
           <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
         </svg>
       </div>
 
-      {/* Form Login */}
-      <div className="bg-black rounded-xl p-8 w-[350px] max-w-[90%] z-10 mr-160">
-        <h2 className="text-white text-center text-2xl font-bold mb-2">
-          Masuk
-        </h2>
+      {/* Form login */}
+      <div className="flex items-center justify-center md:w-1/2 w-full px-4 py-10 md:py-0">
+        <div className="bg-black rounded-2xl p-8 w-full max-w-sm shadow-xl">
+          <h2 className="text-white text-2xl font-bold text-center mb-4">
+            Masuk
+          </h2>
 
-        <div className="text-white text-2xl flex items-center justify-center gap-2 mb-2">
-          <Link href="#">
+          {/* Ikon Sosial */}
+          <div className="flex justify-center items-center text-white text-xl gap-4 mb-2">
             <TiSocialFacebookCircular />
-          </Link>
-          <Link href="#">
             <FaGooglePlusG />
-          </Link>
-          <Link href="#">
             <TiSocialLinkedinCircular />
-          </Link>
-        </div>
+          </div>
 
-        <p className="text-white text-center text-sm opacity-80 mb-4">
-          atau gunakan email anda untuk login
-        </p>
+          <p className="text-white text-center text-sm mb-4">
+            atau gunakan email anda untuk registrasi
+          </p>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="flex flex-col gap-1">
-            <label className="text-white text-sm font-medium">Email</label>
+          <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
-              className="w-full pl-4 pr-4 py-3 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
-              placeholder="Masukkan email"
+              placeholder="Nama"
+              className="w-full px-4 py-2 rounded-full bg-white text-black placeholder-gray-700 focus:outline-none"
               required
             />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label className="text-white text-sm font-medium">Password</label>
             <input
               type="password"
               name="password"
               value={form.password}
               onChange={handleChange}
-              className="w-full pl-4 pr-4 py-3 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400"
-              placeholder="Masukkan password"
+              placeholder="Password"
+              className="w-full px-4 py-2 rounded-full bg-white text-black placeholder-gray-700 focus:outline-none"
               required
             />
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-2 rounded-full bg-purple-500 text-white font-semibold hover:bg-purple-600 transition"
+            >
+              {loading ? "Loading..." : "Masuk"}
+            </button>
+          </form>
+
+          {message && (
+            <p className="text-white text-sm mt-2 text-center">{message}</p>
+          )}
+
+          <div className="text-center mt-4">
+            <a href="#" className="text-white text-sm block opacity-80 mb-1">
+              Lupa password?
+            </a>
+            <Link
+              href="/register"
+              className="text-white text-sm block opacity-80"
+            >
+              Belum punya akun?
+            </Link>
           </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 rounded-lg bg-purple-600 text-white font-bold hover:bg-purple-700 transition-colors duration-200"
-          >
-            {loading ? "Loading..." : "Masuk"}
-          </button>
-        </form>
-
-        {/* Pesan */}
-        {message && (
-          <p className="text-white text-sm mt-2 text-center">{message}</p>
-        )}
-
-        <div className="text-center mt-3">
-          <a href="#" className="text-white text-sm opacity-80">
-            Lupa password?
-          </a>
-        </div>
-        <div className="text-center mt-3">
-          <Link href="/register" className="text-white text-sm opacity-80">
-            Belum punya akun?
-          </Link>
         </div>
       </div>
 
-      {/* Dekorasi */}
-      <div className="absolute top-[15%] right-[15%] text-lime-400 text-4xl z-[-1]">
-        ★
+      {/* Teks Samping Kanan */}
+      <div className="hidden md:flex items-center justify-center md:w-1/2 relative px-6">
+        <img
+          src="/Group 85.png"
+          alt="Go Bi Quest"
+          className="w-full max-w-[600px] object-contain"
+        />
       </div>
-      <div className="absolute bottom-[20%] left-[25%] w-0 h-0 border-l-[25px] border-l-transparent border-r-[25px] border-r-transparent border-b-[40px] border-b-lime-400 rotate-[-20deg] z-[-1]" />
-      <div className="absolute bottom-[15%] right-[20%] w-10 h-10 border-8 border-orange-400 rounded-full z-[-1]" />
     </div>
   );
 };

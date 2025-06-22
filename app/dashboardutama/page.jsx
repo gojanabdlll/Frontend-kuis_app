@@ -47,24 +47,26 @@ const GoBiQuestUI = () => {
       </div>
 
       {/* Hero Section */}
-      <section className="text-center ">
-        <div className="max-w-full mx-auto">
+      <section className="text-center">
+        <div className="w-full">
           <div
-            className="w-full min-h-screen flex flex-col justify-center items-center bg-cover bg-center bg-no-repeat"
+            className="w-full min-h-screen flex flex-col justify-center items-center bg-cover bg-center bg-no-repeat px-4 py-10"
             style={{
               backgroundImage: "url('/img-001.png')",
               backgroundAttachment: "scroll",
             }}
           >
+            {/* Logo/Gambar */}
             <img
               src="/img-002.png"
               alt="Go Bi Quest"
-              className="max-w-3xl h-auto mb-6"
+              className="w-[80%] max-w-md md:max-w-3xl h-auto mb-6"
             />
 
+            {/* Tombol Mulai */}
             <a
               href="/halamanquiz"
-              className="inline-block bg-white text-black px-10 py-3 rounded-full font-bold text-lg shadow-md hover:bg-gray-100 transition duration-200"
+              className="inline-block bg-white text-black px-8 py-3 md:px-10 md:py-4 rounded-full font-bold text-base md:text-lg shadow-md hover:bg-gray-100 transition duration-200"
             >
               Mulai
             </a>

@@ -22,7 +22,7 @@ export default function QuizPage() {
             number: index + 1,
             text: q.question,
             options: q.options.map((opt, i) => ({
-              id: String.fromCharCode(97 + i), // a, b, c, d
+              id: String.fromCharCode(97 + i),
               text: opt,
             })),
           }));
@@ -43,6 +43,14 @@ export default function QuizPage() {
     setSelectedAnswer(optionId);
   };
 
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.href = "/";
+    }
+  };
+
   const handleNext = async () => {
     if (selectedAnswer) {
       const newAnswers = {
@@ -56,8 +64,6 @@ export default function QuizPage() {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
       } else {
         console.log("Selesai. Jawaban:", newAnswers);
-
-        // 🔐 Ambil token dari localStorage atau session
         const token = localStorage.getItem("token");
 
         try {
@@ -68,7 +74,7 @@ export default function QuizPage() {
               Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-              quizId: "6803751a225adeb7c18087fa", // <- Ganti dengan ID kuis yang aktif
+              quizId: "6803751a225adeb7c18087fa",
               answers: Object.entries(newAnswers).map(([index, optionId]) => ({
                 questionIndex: parseInt(index),
                 selectedOption: optionId,
@@ -80,7 +86,6 @@ export default function QuizPage() {
 
           if (!res.ok) throw new Error(data.message || "Gagal submit jawaban");
 
-          // Jika sukses baru redirect
           router.push("/hasilquiz");
         } catch (error) {
           console.error("Gagal kirim jawaban:", error.message);
@@ -110,20 +115,17 @@ export default function QuizPage() {
       }}
     >
       <div className="bg-[#FFD400] rounded-[16px] shadow-xl px-6 py-6 w-[90%] max-w-xl relative z-10">
-        {currentQuestionIndex > 0 && (
+        {/* 🔙 Tombol Back di dalam box */}
+        <div className="flex items-center mb-6">
           <button
-            onClick={() => {
-              const prevIndex = currentQuestionIndex - 1;
-              setCurrentQuestionIndex(prevIndex);
-              setSelectedAnswer(answers[prevIndex] || null);
-            }}
-            className="absolute top-4 left-4 w-8 h-8 bg-black rounded-md flex items-center justify-center"
+            onClick={handleBack}
+            className="p-2 bg-black text-white hover:bg-white/20 rounded-full transition-colors"
           >
-            <ChevronLeft className="w-4 h-4 text-white" />
+            <ChevronLeft size={24} />
           </button>
-        )}
+        </div>
 
-        <div className="pt-10 pb-6">
+        <div className="pb-6">
           <h2 className="text-lg font-bold text-black mb-4">
             {currentQuestion.number}. {currentQuestion.text}
           </h2>
@@ -135,7 +137,7 @@ export default function QuizPage() {
                 onClick={() => handleAnswerSelect(option.id)}
                 className={`cursor-pointer px-4 py-2 rounded-md font-semibold transition duration-200 ${
                   selectedAnswer === option.id
-                    ? "bg-orange-500 text-white scale-[1.02]"
+                    ? "bg-purple-700 text-white scale-[1.02]"
                     : "bg-transparent text-black hover:bg-yellow-200"
                 }`}
               >
