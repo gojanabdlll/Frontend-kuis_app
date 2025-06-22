@@ -1,26 +1,45 @@
 "use client";
 
-import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const RankingPage = () => {
-  const rankingData = [
-    { rank: 1, name: "Rexxy", score: 1500, isFirst: true },
-    { rank: 2, name: "arifubila", score: 1400, isFirst: false },
-    { rank: 3, name: "gojan", score: 1100, isFirst: false },
-    { rank: 4, name: "wijaya", score: 500, isFirst: false },
-    { rank: 5, name: "Ferry", score: 250, isFirst: false },
-  ];
+  const [rankingData, setRankingData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/score/leaderboard");
+        const data = await res.json();
+        console.log("Respon leaderboard:", data);
+
+        // Langsung set array tanpa cek .data
+        if (Array.isArray(data)) {
+          setRankingData(data);
+        } else {
+          console.error("Data leaderboard tidak dalam format array.");
+          setRankingData([]); // fallback kosong
+        }
+      } catch (err) {
+        console.error("Gagal mengambil leaderboard:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLeaderboard();
+  }, []);
 
   return (
     <div
       className="min-h-screen relative overflow-hidden"
       style={{
         backgroundImage: "url('/img-001.png')",
-        backgroundColor: "#8B5CF6", // fallback warna ungu
+        backgroundColor: "#8B5CF6",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-        backgroundBlendMode: "multiply", // blend gambar + warna dasar
+        backgroundBlendMode: "multiply",
       }}
     >
       {/* Header */}
@@ -31,13 +50,13 @@ const RankingPage = () => {
             <a href="/halamanquiz" className="hover:underline">
               Kategori Pelajaran
             </a>
-            <a href="leaderboard" className="hover:underline">
+            <a href="/leaderboard" className="hover:underline">
               Tampilan Skor
             </a>
           </div>
           <div className="flex items-center gap-2 bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-bold">
-            <span>250 Point</span>
-            <div className="w-6 h-6 bg-gray-600 rounded-full"></div>
+            <span>🏆</span>
+            <span>Leaderboard</span>
           </div>
         </nav>
       </div>
@@ -47,31 +66,32 @@ const RankingPage = () => {
         <h1 className="text-white text-5xl font-bold mb-12">Ranking</h1>
 
         <div className="w-295 max-w-7xl space-y-4">
-          {rankingData.map((player) => (
-            <div
-              key={player.rank}
-              className={`flex items-center rounded-2xl p-6 ${
-                player.isFirst
-                  ? "bg-gradient-to-r from-yellow-400 to-yellow-500 text-black"
-                  : "bg-black text-white"
-              }`}
-            >
-              {/* Rank Number */}
-              <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center text-2xl font-bold">
-                {player.rank}
+          {loading ? (
+            <p className="text-white">Memuat data leaderboard...</p>
+          ) : rankingData.length === 0 ? (
+            <p className="text-white">Belum ada data skor.</p>
+          ) : (
+            rankingData.map((player, index) => (
+              <div
+                key={index}
+                className={`flex items-center rounded-2xl p-6 ${
+                  index === 0
+                    ? "bg-gradient-to-r from-yellow-400 to-yellow-500 text-black"
+                    : "bg-black text-white"
+                }`}
+              >
+                <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center text-2xl font-bold">
+                  {index + 1}
+                </div>
+                <div className="flex-grow ml-4 text-2xl font-bold">
+                  {player.name}
+                </div>
+                <div className="flex-shrink-0 text-2xl font-bold">
+                  {player.score}
+                </div>
               </div>
-
-              {/* Player Name */}
-              <div className="flex-grow ml-4 text-2xl font-bold">
-                {player.name}
-              </div>
-
-              {/* Score */}
-              <div className="flex-shrink-0 text-2xl font-bold">
-                {player.score}
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
 
