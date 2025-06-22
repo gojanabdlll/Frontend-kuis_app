@@ -35,7 +35,7 @@ const QuizPage = () => {
   const quizCategories = [
     {
       id: 1,
-      title: "matematika",
+      title: "Matematika",
       display: "MATEMATIKA",
       description: "Uji kemampuan matematika dan lihat seberapa jago kamu!",
       color: "bg-yellow-400",
