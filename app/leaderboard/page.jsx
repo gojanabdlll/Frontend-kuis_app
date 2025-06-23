@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const RankingPage = () => {
   const [rankingData, setRankingData] = useState([]);
@@ -45,7 +46,12 @@ const RankingPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4">
         <nav className="mx-auto mt-4 max-w-7xl w-295 bg-black rounded-xl px-6 py-3 flex items-center justify-between shadow-lg">
-          <div className="text-2xl font-black text-white">GoBiQuest</div>
+          <Link href="/dashboardutama">
+            <div className="text-2xl font-black text-white cursor-pointer">
+              GoBiQuest
+            </div>
+          </Link>
+
           <div className="hidden md:flex gap-8 text-white font-medium text-sm">
             <a href="/halamanquiz" className="hover:underline">
               Kategori Pelajaran

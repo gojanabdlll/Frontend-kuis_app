@@ -66,15 +66,6 @@ const LoginPage = () => {
         backgroundColor: "#9B5DE5",
       }}
     >
-      <div
-        className="absolute top-4 left-4 w-8 h-8 bg-black text-white flex items-center justify-center rounded-full cursor-pointer z-10"
-        onClick={() => history.back()}
-      >
-        <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white">
-          <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
-        </svg>
-      </div>
-
       <div className="flex items-center justify-center md:w-1/2 w-full px-4 py-10 md:py-0">
         <div className="bg-black rounded-2xl p-8 w-full max-w-sm shadow-xl">
           <h2 className="text-white text-2xl font-bold text-center mb-4">

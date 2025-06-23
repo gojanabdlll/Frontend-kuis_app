@@ -1,9 +1,11 @@
 "use client";
-import React, { useRef, useEffect } from "react";
-import { BookOpen, Award, User, Menu } from "lucide-react";
+import React, { useRef, useEffect, useState } from "react";
+import { BookOpen, Award, User, Menu, X } from "lucide-react";
+import Link from "next/link";
 
 const GoBiQuestUI = () => {
   const scrollRef = useRef(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const container = scrollRef.current;
@@ -14,13 +16,12 @@ const GoBiQuestUI = () => {
         scrollAmount += 1;
         container.scrollLeft += 1;
 
-        // Reset scroll jika mencapai ujung
         if (scrollAmount >= container.scrollWidth - container.clientWidth) {
           container.scrollLeft = 0;
           scrollAmount = 0;
         }
       }
-    }, 20); // atur kecepatan scroll
+    }, 20);
 
     return () => clearInterval(scrollInterval);
   }, []);
@@ -29,13 +30,15 @@ const GoBiQuestUI = () => {
     <div className="min-h-screen flex flex-col bg-purple-600 text-white font-sans">
       {/* Navbar */}
       <div className="flex items-center justify-between px-6 py-4">
-        <nav className="mx-auto mt-4 max-w-7xl w-295 bg-black rounded-xl px-6 py-3 flex items-center justify-between shadow-lg">
-          <div
-            href="/dashboardutama"
-            className="text-2xl font-black text-white"
-          >
-            GoBiQuest
-          </div>
+        <nav className="mx-auto mt-4 max-w-7xl w-full bg-black rounded-xl px-6 py-4 flex items-center justify-between shadow-lg relative">
+          {/* Logo */}
+          <Link href="/dashboardutama">
+            <div className="text-2xl font-black text-white cursor-pointer">
+              GoBiQuest
+            </div>
+          </Link>
+
+          {/* Desktop Menu */}
           <div className="hidden md:flex gap-8 text-white font-medium text-sm">
             <a href="./halamanquiz" className="hover:underline">
               Kategori Pelajaran
@@ -44,7 +47,34 @@ const GoBiQuestUI = () => {
               Tampilan Skor
             </a>
           </div>
-          <div className="flex items-center gap-2 bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-bold">
+
+          {/* Mobile Menu Toggle */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="text-white focus:outline-none"
+            >
+              {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+
+          {/* Mobile Dropdown Menu */}
+          {menuOpen && (
+            <div className="absolute top-full right-4 mt-2 w-full left-0 bg-black text-white rounded-lg shadow-lg z-10 flex flex-col md:hidden">
+              <a
+                href="./halamanquiz"
+                className="px-4 py-2 hover:bg-gray-100 border-b"
+              >
+                Kategori Pelajaran
+              </a>
+              <a href="../leaderboard" className="px-4 py-2 hover:bg-gray-100">
+                Tampilan Skor
+              </a>
+            </div>
+          )}
+
+          {/* Poin Badge (Hanya Desktop) */}
+          <div className="hidden md:flex items-center gap-2 bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-bold ml-4">
             <span>250 Point</span>
             <div className="w-6 h-6 bg-gray-600 rounded-full"></div>
           </div>
@@ -61,14 +91,11 @@ const GoBiQuestUI = () => {
               backgroundAttachment: "scroll",
             }}
           >
-            {/* Logo/Gambar */}
             <img
               src="/img-002.png"
               alt="Go Bi Quest"
               className="w-[80%] max-w-md md:max-w-3xl h-auto mb-6"
             />
-
-            {/* Tombol Mulai */}
             <a
               href="/halamanquiz"
               className="inline-block bg-white text-black px-8 py-3 md:px-10 md:py-4 rounded-full font-bold text-base md:text-lg shadow-md hover:bg-gray-100 transition duration-200"
@@ -108,7 +135,6 @@ const GoBiQuestUI = () => {
       {/* How It Works Section */}
       <section className="py-12 px-6 bg-[#A259FF] text-white bg-purple-600">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          {/* Gambar Ilustrasi */}
           <div className="relative w-full max-w-sm mx-auto">
             <img
               src="/bg-emot-rmv.png"
@@ -116,8 +142,6 @@ const GoBiQuestUI = () => {
               className="w-full h-auto"
             />
           </div>
-
-          {/* Teks Penjelasan */}
           <div>
             <h2 className="text-3xl font-bold mb-6">Cara kerja kuis</h2>
             <div className="space-y-6">
@@ -151,7 +175,6 @@ const GoBiQuestUI = () => {
         <div className="max-w-7xl mx-auto bg-black text-white rounded-t-[60px] p-8 shadow-lg">
           <h2 className="text-3xl font-bold mb-8">Testimoni</h2>
 
-          {/* Marquee */}
           <div className="overflow-hidden relative">
             <div className="flex gap-8 animate-scroll-x whitespace-nowrap">
               {[...Array(2)].flatMap((_, round) =>
@@ -159,18 +182,18 @@ const GoBiQuestUI = () => {
                   {
                     name: "Arifubila",
                     comment: "Kuisnya kreatif, cocok untuk mengisi waktu!",
-                    img: "/.png",
+                    img: "/arif.png",
                   },
                   {
                     name: "Gojan Abdullah",
                     comment:
                       "Kuis ini jadi favorit saya! Selalu ingin coba lagi.",
-                    img: "/.png",
+                    img: "/gojan.png",
                   },
                   {
                     name: "Ferry",
                     comment: "Belajarnya jadi fun dan nggak membosankan!",
-                    img: "/.png",
+                    img: "/fery.png",
                   },
                 ].map((user, i) => (
                   <div
@@ -198,7 +221,6 @@ const GoBiQuestUI = () => {
             </div>
           </div>
 
-          {/* Tombol Mainkan Kuis */}
           <div className="mt-10 text-center">
             <a href="../halamanquiz">
               <button className="bg-purple-500 text-white px-6 py-2 rounded-full font-semibold text-sm uppercase hover:bg-purple-400 transition">
