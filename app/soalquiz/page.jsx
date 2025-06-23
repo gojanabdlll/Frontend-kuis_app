@@ -5,6 +5,52 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
+const getCategoryStyle = (category) => {
+  const quizCategories = [
+    {
+      id: 1,
+      title: "matematika",
+      color: "bg-yellow-400",
+      hex: "#FACC15",
+      hover: "hover:bg-yellow-200",
+      textColor: "text-black",
+    },
+    {
+      id: 2,
+      title: "sains",
+      color: "bg-teal-300",
+      hex: "#5EEAD4",
+      hover: "hover:bg-teal-200",
+      textColor: "text-black",
+    },
+    {
+      id: 3,
+      title: "bahasa inggris",
+      color: "bg-purple-500",
+      hex: "#A855F7",
+      hover: "hover:bg-purple-300",
+      textColor: "text-white",
+    },
+    {
+      id: 4,
+      title: "sejarah",
+      color: "bg-white",
+      hex: "#FFFFFF",
+      hover: "hover:bg-gray-200",
+      textColor: "text-black",
+    },
+  ];
+
+  return (
+    quizCategories.find((cat) => cat.title === category?.toLowerCase()) || {
+      color: "bg-white",
+      hex: "#FFFFFF",
+      hover: "hover:bg-yellow-200",
+      textColor: "text-black",
+    }
+  );
+};
+
 export default function QuizPage() {
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -15,6 +61,7 @@ export default function QuizPage() {
   const searchParams = useSearchParams();
   const category = searchParams.get("category");
   const [quizId, setQuizId] = useState(null);
+  const { color, textColor, hex, hover } = getCategoryStyle(category);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -25,7 +72,6 @@ export default function QuizPage() {
         const data = await res.json();
 
         if (Array.isArray(data) && data.length > 0 && data[0].questions) {
-          // Simpan quizId ke state dan localStorage
           setQuizId(data[0]._id);
           localStorage.setItem("quizId", data[0]._id);
 
@@ -33,7 +79,7 @@ export default function QuizPage() {
             number: index + 1,
             text: q.question,
             options: q.options.map((opt, i) => ({
-              id: String.fromCharCode(65 + i), // A, B, C, D
+              id: String.fromCharCode(65 + i),
               text: opt,
             })),
           }));
@@ -77,11 +123,9 @@ export default function QuizPage() {
       if (currentQuestionIndex < questions.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
       } else {
-        // Simpan ke localStorage sebelum redirect ke hasil
         const answerArray = Object.values(newAnswers);
         localStorage.setItem("answers", JSON.stringify(answerArray));
-
-        router.push("/hasilquiz"); // ⬅️ langsung ke hasil, submit dilakukan di halaman hasil
+        router.push("/hasilquiz");
       }
     }
   };
@@ -105,19 +149,40 @@ export default function QuizPage() {
         backgroundAttachment: "scroll",
       }}
     >
-      <div className="bg-[#FFD400] rounded-[16px] shadow-xl px-6 py-6 w-[90%] max-w-xl relative z-10">
-        {/* 🔙 Tombol Back di dalam box */}
-        <div className="flex items-center mb-6">
-          <button
-            onClick={handleBack}
-            className="p-2 bg-black text-white hover:bg-white/20 rounded-full transition-colors"
-          >
-            <ChevronLeft size={24} />
-          </button>
-        </div>
+      <div
+        className={`rounded-[16px] shadow-xl px-6 py-6 w-[90%] max-w-xl relative z-10 ${textColor}`}
+        style={{ backgroundColor: hex }}
+      >
+        {/* 🔙 Tombol back ke halaman sebelumnya (hanya tampil di soal pertama) */}
+        {currentQuestionIndex === 0 && (
+          <div className="flex items-center mb-6">
+            <button
+              onClick={handleBack}
+              className="p-2 bg-black text-white hover:bg-white/20 rounded-full transition-colors"
+            >
+              <ChevronLeft size={24} />
+            </button>
+          </div>
+        )}
 
-        <div className="pb-6">
-          <h2 className="text-lg font-bold text-black mb-4">
+        {/* 🔙 Tombol soal sebelumnya */}
+        {currentQuestionIndex > 0 && (
+          <div className="flex items-center mb-6">
+            <button
+              onClick={() => {
+                const prevIndex = currentQuestionIndex - 1;
+                setCurrentQuestionIndex(prevIndex);
+                setSelectedAnswer(answers[prevIndex] || null);
+              }}
+              className="p-2 bg-black text-white hover:bg-white/20 rounded-full transition-colors"
+            >
+              <ChevronLeft size={24} />
+            </button>
+          </div>
+        )}
+
+        <div className="pt-2 pb-6">
+          <h2 className="text-lg font-bold mb-4">
             {currentQuestion.number}. {currentQuestion.text}
           </h2>
 
@@ -128,8 +193,8 @@ export default function QuizPage() {
                 onClick={() => handleAnswerSelect(option.id)}
                 className={`cursor-pointer px-4 py-2 rounded-md font-semibold transition duration-200 ${
                   selectedAnswer === option.id
-                    ? "bg-purple-700 text-white scale-[1.02]"
-                    : "bg-transparent text-black hover:bg-yellow-200"
+                    ? "bg-orange-500 text-white scale-[1.02]"
+                    : `bg-transparent ${textColor} ${hover}`
                 }`}
               >
                 {option.id}) {option.text}
