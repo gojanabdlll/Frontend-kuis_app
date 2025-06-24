@@ -6,6 +6,7 @@ import Link from "next/link";
 const GoBiQuestUI = () => {
   const scrollRef = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [topScore, setTopScore] = useState(null); // ⬅️ Tambahan state untuk skor tertinggi
 
   useEffect(() => {
     const container = scrollRef.current;
@@ -24,6 +25,22 @@ const GoBiQuestUI = () => {
     }, 20);
 
     return () => clearInterval(scrollInterval);
+  }, []);
+
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/score/leaderboard");
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          setTopScore(data[0]); // ambil skor tertinggi
+        }
+      } catch (err) {
+        console.error("Gagal mengambil skor tertinggi:", err);
+      }
+    };
+
+    fetchLeaderboard();
   }, []);
 
   return (
@@ -75,8 +92,11 @@ const GoBiQuestUI = () => {
 
           {/* Poin Badge (Hanya Desktop) */}
           <div className="hidden md:flex items-center gap-2 bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-bold ml-4">
-            <span>250 Point</span>
-            <div className="w-6 h-6 bg-gray-600 rounded-full"></div>
+            <span>{topScore ? `${topScore.score} Point` : "0 Point"}</span>
+            <div
+              className="w-6 h-6 bg-gray-600 rounded-full"
+              title={topScore?.name || "Top Player"}
+            ></div>
           </div>
         </nav>
       </div>

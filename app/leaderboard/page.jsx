@@ -6,6 +6,7 @@ import Link from "next/link";
 const RankingPage = () => {
   const [rankingData, setRankingData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [topScore, setTopScore] = useState(null); // ⬅️ Tambahan state untuk skor tertinggi
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
@@ -14,12 +15,14 @@ const RankingPage = () => {
         const data = await res.json();
         console.log("Respon leaderboard:", data);
 
-        // Langsung set array tanpa cek .data
         if (Array.isArray(data)) {
           setRankingData(data);
+          if (data.length > 0) {
+            setTopScore(data[0]); // Ambil skor tertinggi
+          }
         } else {
           console.error("Data leaderboard tidak dalam format array.");
-          setRankingData([]); // fallback kosong
+          setRankingData([]);
         }
       } catch (err) {
         console.error("Gagal mengambil leaderboard:", err);
@@ -60,9 +63,14 @@ const RankingPage = () => {
               Tampilan Skor
             </a>
           </div>
+
+          {/* Badge skor tertinggi */}
           <div className="hidden md:flex items-center gap-2 bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-bold ml-4">
-            <span>250 Point</span>
-            <div className="w-6 h-6 bg-gray-600 rounded-full"></div>
+            <span>{topScore ? `${topScore.score} Point` : "0 Point"}</span>
+            <div
+              className="w-6 h-6 bg-gray-600 rounded-full"
+              title={topScore?.name || "Top Player"}
+            ></div>
           </div>
         </nav>
       </div>
