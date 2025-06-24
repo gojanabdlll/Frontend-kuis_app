@@ -193,7 +193,7 @@ export default function QuizPage() {
                 onClick={() => handleAnswerSelect(option.id)}
                 className={`cursor-pointer px-4 py-2 rounded-md font-semibold transition duration-200 ${
                   selectedAnswer === option.id
-                    ? "bg-orange-500 text-white scale-[1.02]"
+                    ? "bg-orange-400 text-black scale-[1.02]"
                     : `bg-transparent ${textColor} ${hover}`
                 }`}
               >

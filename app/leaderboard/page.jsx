@@ -60,9 +60,9 @@ const RankingPage = () => {
               Tampilan Skor
             </a>
           </div>
-          <div className="flex items-center gap-2 bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-bold">
-            <span>🏆</span>
-            <span>Leaderboard</span>
+          <div className="hidden md:flex items-center gap-2 bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-bold ml-4">
+            <span>250 Point</span>
+            <div className="w-6 h-6 bg-gray-600 rounded-full"></div>
           </div>
         </nav>
       </div>
