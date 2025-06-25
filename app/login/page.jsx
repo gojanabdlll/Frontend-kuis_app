@@ -115,9 +115,6 @@ const LoginPage = () => {
           )}
 
           <div className="text-center mt-4">
-            <a href="#" className="text-white text-sm block opacity-80 mb-1">
-              Lupa password?
-            </a>
             <Link
               href="/register"
               className="text-white text-sm block opacity-80"
