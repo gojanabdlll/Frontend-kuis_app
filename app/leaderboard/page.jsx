@@ -3,36 +3,41 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
+const categories = ["matematika", "sains", "bahasa inggris", "sejarah"];
+
 const RankingPage = () => {
   const [rankingData, setRankingData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [topScore, setTopScore] = useState(null); // ⬅️ Tambahan state untuk skor tertinggi
+  const [topScore, setTopScore] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/score/leaderboard");
+        setLoading(true);
+        const res = await fetch(
+          `http://localhost:5000/api/score/leaderboard?category=${encodeURIComponent(
+            selectedCategory
+          )}`
+        );
         const data = await res.json();
-        console.log("Respon leaderboard:", data);
 
-        if (Array.isArray(data)) {
-          setRankingData(data);
-          if (data.length > 0) {
-            setTopScore(data[0]); // Ambil skor tertinggi
-          }
+        if (Array.isArray(data.leaderboard)) {
+          setRankingData(data.leaderboard);
+          setTopScore(data.leaderboard[0] || null);
         } else {
-          console.error("Data leaderboard tidak dalam format array.");
           setRankingData([]);
         }
       } catch (err) {
         console.error("Gagal mengambil leaderboard:", err);
+        setRankingData([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchLeaderboard();
-  }, []);
+  }, [selectedCategory]);
 
   return (
     <div
@@ -64,7 +69,6 @@ const RankingPage = () => {
             </a>
           </div>
 
-          {/* Badge skor tertinggi */}
           <div className="hidden md:flex items-center gap-2 bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-bold ml-4">
             <span>{topScore ? `${topScore.score} Point` : "0 Point"}</span>
             <div
@@ -75,9 +79,26 @@ const RankingPage = () => {
         </nav>
       </div>
 
+      {/* Pilih Kategori */}
+      <div className="flex justify-center mt-4">
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="px-4 py-2 rounded-lg bg-white text-black font-bold"
+        >
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {/* Main Content */}
       <div className="flex flex-col items-center px-6 py-8">
-        <h1 className="text-white text-5xl font-bold mb-12">Ranking</h1>
+        <h1 className="text-white text-5xl font-bold mb-4">
+          Ranking: {selectedCategory}
+        </h1>
 
         <div className="w-295 max-w-7xl space-y-4">
           {loading ? (
@@ -107,16 +128,6 @@ const RankingPage = () => {
             ))
           )}
         </div>
-      </div>
-
-      {/* Background Decorations */}
-      <div className="absolute top-[20%] right-[10%] text-lime-400 text-4xl z-[-1]">
-        ★
-      </div>
-      <div className="absolute bottom-[25%] left-[15%] w-0 h-0 border-l-[25px] border-l-transparent border-r-[25px] border-r-transparent border-b-[40px] border-b-lime-400 rotate-[-30deg] z-[-1]" />
-      <div className="absolute top-[60%] right-[25%] w-8 h-8 border-6 border-orange-400 rounded-full z-[-1]" />
-      <div className="absolute bottom-[10%] right-[5%] text-pink-400 text-3xl z-[-1]">
-        ★
       </div>
     </div>
   );
